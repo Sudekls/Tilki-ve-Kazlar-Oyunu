@@ -163,7 +163,6 @@
 
     <div class="controls">
       <button id="restartBtn">Yeni Oyun</button>
-      
 
       <div class="difficulty">
         <label for="difficultySelect">Zorluk</label>
@@ -186,7 +185,7 @@
 
 <li><strong>Tilki (Kırmızı):</strong> Tilki her turda komşu bir noktaya <strong>1 adım</strong> hareket edebilir. 
   Ayrıca “yeme” hamlesiyle bir kazı alarak ilerleyebilir: Tilki ile kaz komşu olmalı ve kazın hemen arkasındaki hedef nokta <strong>boş</strong> olmalıdır. 
-  Bu durumda tilki kazın üzerinden atlar, kaz oyundan çıkar ve tilki boş hedef noktaya yerleşir. Tilki bir yeme hamlesi yaptığında, eğer ardından yiyebileceği başka bir kaz varsa, kazlara hamle hakkı gelmeden peş peşe yeme hamleleri yapabilir.</li>
+  Bu durumda tilki kazın üzerinden atlar, kaz oyundan çıkar ve tilki boş hedef noktaya yerleşir. “Tilki bir yeme hamlesi yaptığında, eğer ardından yiyebileceği başka bir kaz varsa, kazlara hamle hakkı gelmeden peş peşe yeme hamleleri yapabilir.</li>
 
 <li><strong>Bu sürümün özel kuralı:</strong> Tilki <strong>çapraz hareket edebilir</strong> (komşu çapraz noktaya 1 adım gidebilir). 
   Ancak tilki <strong>çapraz yiyemez</strong>: yeme hamlesi sadece <strong>düz yönde</strong> yapılır (yatay veya dikey). 
@@ -355,7 +354,6 @@
       const movesEl = document.getElementById('moves');
       const messageEl = document.getElementById('message');
       const restartBtn = document.getElementById('restartBtn');
-      const hintBtn = document.getElementById('hintBtn');
       const playAsGeeseBtn = document.getElementById('playAsGeese');
       const playAsFoxBtn = document.getElementById('playAsFox');
       const difficultySelect = document.getElementById('difficultySelect');
@@ -957,47 +955,11 @@
         }
       }
 
-      function showHint() {
-        if (gameState.gameOver || gameState.selectedPiece) return;
-
-        if ((gameState.playerSide === 'geese' && gameState.currentPlayer === 'fox') ||
-            (gameState.playerSide === 'fox' && gameState.currentPlayer === 'geese')) {
-          messageEl.textContent = "Şu anda sıra sizde değil.";
-          return;
-        }
-
-        let allMoves = [];
-        for (let r = 0; r < BOARD_SIZE; r++) {
-          for (let c = 0; c < BOARD_SIZE; c++) {
-            const p = gameState.board[r][c];
-            if ((gameState.currentPlayer === 'geese' && p === 'goose') ||
-                (gameState.currentPlayer === 'fox' && p === 'fox')) {
-              const moves = getValidMoves(r, c);
-              moves.forEach(m => allMoves.push({ from: { row: r, col: c }, to: m }));
-            }
-          }
-        }
-
-        if (allMoves.length === 0) {
-          messageEl.textContent = "İpucu: Hiç hamle bulunamadı.";
-          return;
-        }
-
-        const hint = allMoves[Math.floor(Math.random() * allMoves.length)];
-        gameState.selectedPiece = hint.from;
-        gameState.validMoves = [hint.to];
-        renderBoard();
-        messageEl.textContent = "İpucu: İşaretli hücreye hareket edebilirsiniz.";
-      }
-
       restartBtn.addEventListener('click', initializeGame);
-      hintBtn.addEventListener('click', showHint);
 
       initializeGame();
     });
   </script>
 </body>
 </html>
-
 <!-- test -->
-
